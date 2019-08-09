@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ps.qa.mapper.InviteMapper">
+    <select id="inviteUser" resultType="com.ps.qa.domain.QasysUserT">
+        select id, username, password, integral, code from qasys_user_t where code=#{code}
+    </select>
+    <insert id="integralWater">
+        insert into qasys_integral_t (user_id, integral, state) values (#{userid},#{jifen},#{type});
+    </insert>
+    <resultMap id="query" type="com.ps.qa.domain.QasysQdetailT">
+        <id property="id" column="questionId"/>
+        <result property="question" column="question"/>
+        <result property="qasysQuestionnaireT.projectName" column="theme"/>
+    </resultMap>
+    <select id="queryMessage" resultMap="query">
+        SELECT
+            qt.id 'questionId',
+            qt.question 'question',
+            qn.project_name 'theme'
+        FROM
+            qasys_qdetail_t qt
+            LEFT JOIN qasys_questionnaire_t qn ON ( qn.id = qt.project_id )
+        WHERE
+            qn.id =#{themeid}
+    </select>
+    <select id="queryJiFen" resultType="int" p>
+        select integral from qasys_questionnaire_t where id=#{anserId}
+    </select>
+    <insert id="addQdetail">
+        insert into qasys_qresult_t (mid,project_id,result) values (#{userId},#{anserId},#{answer});
+
+    </insert>
+</mapper>

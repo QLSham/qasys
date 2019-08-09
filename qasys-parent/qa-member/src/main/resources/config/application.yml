@@ -1,0 +1,59 @@
+# spring.application.name
+spring:
+  application:
+    name: dubbo-auto-configuration-provider-demo
+  # 数据库
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/qa-core
+    username: root
+    password: ps123456
+    driver-class-name: com.mysql.jdbc.Driver
+  # redis配置
+  redis:
+    ## Redis数据库索引（默认为0）
+    database: 0
+    ## Redis服务器地址
+    host: 127.0.0.1
+    ## Redis服务器连接端口
+    port: 6379
+    ## Redis服务器连接密码（默认为空）
+    password:
+    jedis:
+      pool:
+        ## 连接池最大连接数（使用负值表示没有限制）
+        max-active: 100
+        ## 连接池中的最大空闲连接
+        max-idle: 3
+        ## 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        ## 连接池中的最小空闲连接
+        min-idle: 0
+        ## 连接超时时间（毫秒）
+    timeout: 1000
+
+mybatis:
+  type-aliases-package: com.ps.qa.domain
+  mapper-locations: /mapper/*.xml
+  # 消息队列
+  kafka:
+    bootstrap-servers: localhost:9092
+# dubbo
+dubbo:
+  scan:
+    # dubbo扫描的包路径  就是扫描service的包路径
+    base-packages: com.ps.qa.service
+  protocol:
+    # dubbo连接的名字,dubbo定义的就是dubbo,不要更改
+    name: dubbo
+    # dubbo连接的端口
+    port: 8888
+  registry:
+    # 连接zookeeper 注册中心
+    address: zookeeper://192.168.3.102:2181
+    # 连接zookeeper 注册中心的节点
+    group: dlamgroup
+  # dubbo默认的超时时间未一秒,设置超时时间,好让测试同步锁的时候,不会报错,方便测试
+  provider:
+    timeout: 120000
+server:
+  port: 9090

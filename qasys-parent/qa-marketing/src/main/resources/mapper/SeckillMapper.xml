@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ps.qa.mapper.SeckillMapper">
+    <select id="queryMessage" resultType="com.ps.qa.domain.QasysCommodityT">
+        select id, name,exchangeIntegral,value,describes,startTime,endTime,version from qasys_commodity_t where id=#{commId}
+    </select>
+    <select id="queryOrderCommId" resultType="string">
+        select ordertime from qasys_order_t where user_id=#{userId} and com_id=#{commId}
+    </select>
+    <update id="updateNumber">
+        update qasys_commodity_t set value=#{number},version=version+1 where id=#{commId} and version=#{version}
+    </update>
+    <insert id="createOrder">
+        insert into qasys_order_t (user_id,com_id) values (#{userId},#{commId});
+    </insert>
+</mapper>

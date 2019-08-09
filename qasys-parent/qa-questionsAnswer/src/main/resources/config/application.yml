@@ -1,0 +1,37 @@
+# spring.application.name
+spring:
+  application:
+    name: dubbo-auto-configuration-provider-demo
+  # 数据库
+  datasource:
+      url: jdbc:mysql://127.0.0.1:3306/qa-core
+      username: root
+      password: ps123456
+      driver-class-name: com.mysql.jdbc.Driver
+    # 搜索引擎
+  data:
+    solr:
+      host: http://127.0.0.1:8983/solr/qa
+server:
+  port: 9091
+
+mybatis:
+  type-aliases-package: com.ps.qa.domain
+  mapper-locations: /mapper/*.xml
+
+dubbo:
+  scan:
+    # dubbo扫描的包路径  就是扫描service的包路径
+    base-packages: com.ps.qa.service
+  protocol:
+    # dubbo连接的名字,dubbo定义的就是dubbo,不要更改
+    name: dubbo
+    # dubbo连接的端口
+    port: 8889
+  registry:
+    # 连接zookeeper 注册中心
+    address: zookeeper://192.168.3.102:2181
+    # 连接zookeeper 注册中心的节点
+    group: dlamgroup
+  provider:
+    timeout: 120000

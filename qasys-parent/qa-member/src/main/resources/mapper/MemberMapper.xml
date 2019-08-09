@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ps.qa.mapper.MemberMapper">
+    <select id="queryMember" resultType="com.ps.qa.domain.QasysUserT">
+        select id,username,password,integral from qasys_user_t
+    </select>
+    <insert id="register">
+        insert into qasys_user_t (username, password, integral,code) values (#{username},#{password},'1000',#{code})
+    </insert>
+    <select id="queryMessage" resultType="com.ps.qa.domain.QasysUserT">
+        select id,username,password,integral from qasys_user_t where username=#{username}
+    </select>
+
+    <select id="queryMessageId" resultType="com.ps.qa.domain.QasysUserT">
+        select id,username,password,integral from qasys_user_t where id=#{answerUserId}
+    </select>
+    <update id="registerAddIntegralAgain">
+        update qasys_user_t set integral=#{integral} where username=#{username}
+    </update>
+    <update id="answerAddIntegral">
+        update qasys_user_t set integral=#{all} where id=#{answerUserId}
+    </update>
+    <select id="querySort" resultType="com.ps.qa.domain.QasysUserT">
+        select id,username,password,integral from qasys_user_t order by integral desc limit 0,10
+    </select>
+    <select id="querySkill" resultType="com.ps.qa.domain.QasysUserT">
+        select id,username,password,integral from qasys_user_t where id=#{userId}
+    </select>
+    <update id="updateIntegarl">
+        update qasys_user_t set integral=#{intagral} where id=#{userId}
+    </update>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ps.qa.mapper.AskQuestionMapper">
+    <select id="queryQuestion" resultType="com.ps.qa.domain.QasysQuestionT">
+        select id,user_id,question,integral,time,answerId from qasys_question_t
+    </select>
+
+    <resultMap id="message" type="com.ps.qa.domain.QasysQuestionT">
+        <id property="id" column="id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="question" column="question"/>
+        <result property="integral" column="integral"/>
+        <result property="qasysAnswerT.id" column="answer_id"/>
+        <result property="qasysAnswerT.answer" column="answer"/>
+    </resultMap>
+    <select id="queryMessage" resultMap="message">
+        SELECT
+			q.id AS 'id',
+			q.user_id AS 'user_id',
+			q.question AS 'question',
+			q.integral AS 'integral',
+			a.id AS 'answer_id',
+			a.answer AS 'answer'
+		FROM
+			qasys_question_t q
+			LEFT JOIN qasys_answer_t a ON ( q.id = a.qid )
+		WHERE
+			q.id = #{id}
+    </select>
+    <insert id="postQuestions">
+        insert into qasys_question_t (user_id, question, integral) values (#{user_id}, #{question}, #{integral})
+    </insert>
+    <select id="queryUser" resultType="long">
+        select integral from qasys_user_t where id = #{user_id}
+    </select>
+    <update id="subtractIntegral">
+        update qasys_user_t set integral=#{integral} where id = #{user_id}
+    </update>
+    <update id="questionAnswering">
+        insert into qasys_answer_t (user_id,answer, qid ) values (#{user_id}, #{answer}, #{qid});
+    </update>
+
+    <resultMap id="query" type="com.ps.qa.domain.QasysQuestionT">
+        <id property="id" column="questionId"/>
+        <result property="integral" column="integral"/>
+        <result property="qasysAnswerT.id" column="answerId"/>
+        <result property="qasysAnswerT.qid" column="qid"/>
+    </resultMap>
+    <select id="queryAdoptPeople" resultMap="query">
+        SELECT
+            q.id AS 'questionId',
+            q.integral AS 'integral',
+            a.id AS 'answerId',
+            a.qid AS 'qid'
+        FROM
+            qasys_question_t q
+            LEFT JOIN qasys_answer_t a ON ( q.id = a.qid )
+        WHERE
+            a.user_id = #{userId}
+            AND q.id = #{qid}
+    </select>
+    <update id="addIntegral">
+        update qasys_user_t set integral=#{afterIntegral} where id=#{userId}
+    </update>
+    <update id="updateQuestion">
+        update qasys_question_t set answerId=#{userId} where id = #{id}
+    </update>
+    <insert id="integralWater" useGeneratedKeys="true" keyProperty="id">
+        insert into qasys_integral_t (user_id, integral, state) values (#{user_id},#{integral},#{state});
+    </insert>
+    <select id="queryMes" resultType="com.ps.qa.domain.QasysIntegralT">
+        select user_id,integral from qasys_integral_t where id=#{waterId}
+    </select>
+</mapper>
